@@ -22,7 +22,7 @@ namespace FreeCourseServices.Basket.Services
         {
             var status = await _redisService.GetDb().KeyDeleteAsync(userId);
 
-            return status ? Response<bool>.Success((int)ResponseStatusCodes.NoContent) : Response<bool>.Fail("Basket not found", (int)ResponseStatusCodes.NotFound);
+            return status ? Response<bool>.Success(ResponseStatusCodes.NoContent) : Response<bool>.Fail("Basket not found", ResponseStatusCodes.NotFound);
         }
 
         public async Task<Response<BasketDto>> GetBasket(string userId)
@@ -30,17 +30,17 @@ namespace FreeCourseServices.Basket.Services
             var existBasket = await _redisService.GetDb().StringGetAsync(userId);
             if (string.IsNullOrEmpty(existBasket))
             {
-                return Response<BasketDto>.Fail("Basket not found", (int)ResponseStatusCodes.NotFound);
+                return Response<BasketDto>.Fail("Basket not found", ResponseStatusCodes.NotFound);
             }
 
-            return Response<BasketDto>.Success(JsonSerializer.Deserialize<BasketDto>(existBasket), (int)ResponseStatusCodes.Ok);
+            return Response<BasketDto>.Success(JsonSerializer.Deserialize<BasketDto>(existBasket), ResponseStatusCodes.Ok);
         }
 
         public async Task<Response<bool>> SaveOrUpdate(BasketDto basketDto)
         {
             var status = await _redisService.GetDb().StringSetAsync(basketDto.UserId, JsonSerializer.Serialize(basketDto));
 
-            return status ? Response<bool>.Success((int)ResponseStatusCodes.NoContent) : Response<bool>.Fail("Basket could not update or save", (int)ResponseStatusCodes.InternalServerError);
+            return status ? Response<bool>.Success(ResponseStatusCodes.NoContent) : Response<bool>.Fail("Basket could not update or save", ResponseStatusCodes.InternalServerError);
         }
     }
 }

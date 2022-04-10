@@ -34,12 +34,12 @@ namespace FreeCourseServices.Catalog.Services
             var course = await _courseCollection.Find<Course>(c => c.Id == id).FirstOrDefaultAsync();
             if (course == null)
             {
-                return Response<CourseDto>.Fail("Course not found", (int)ResponseStatusCodes.NotFound);
+                return Response<CourseDto>.Fail("Course not found", ResponseStatusCodes.NotFound);
             }
 
             course.Category = await _categoryCollection.Find<Category>(c => c.Id == course.CategoryId).FirstOrDefaultAsync();
 
-            return Response<CourseDto>.Success(_mapper.Map<CourseDto>(course), (int)ResponseStatusCodes.Ok);
+            return Response<CourseDto>.Success(_mapper.Map<CourseDto>(course), ResponseStatusCodes.Ok);
         }
 
         public async Task<Response<List<CourseDto>>> GetAllAsync()
@@ -58,7 +58,7 @@ namespace FreeCourseServices.Catalog.Services
                 courses = new List<Course>();
             }
 
-            return Response<List<CourseDto>>.Success(_mapper.Map<List<CourseDto>>(courses), (int)ResponseStatusCodes.Ok);
+            return Response<List<CourseDto>>.Success(_mapper.Map<List<CourseDto>>(courses), ResponseStatusCodes.Ok);
         }
 
         public async Task<Response<List<CourseDto>>> GetAllByUserIdAsync(string userId)
@@ -76,7 +76,7 @@ namespace FreeCourseServices.Catalog.Services
                 courses = new List<Course>();
             }
 
-            return Response<List<CourseDto>>.Success(_mapper.Map<List<CourseDto>>(courses), (int)ResponseStatusCodes.Ok);
+            return Response<List<CourseDto>>.Success(_mapper.Map<List<CourseDto>>(courses), ResponseStatusCodes.Ok);
         }
 
         public async Task<Response<CourseDto>> CreateAsync(CourseCreateDto courseCreateDto)
@@ -86,7 +86,7 @@ namespace FreeCourseServices.Catalog.Services
             
             await _courseCollection.InsertOneAsync(newCourse);
 
-            return Response<CourseDto>.Success(_mapper.Map<CourseDto>(newCourse), (int)ResponseStatusCodes.Created);
+            return Response<CourseDto>.Success(_mapper.Map<CourseDto>(newCourse), ResponseStatusCodes.Created);
         }
 
         public async Task<Response<NoContent>> UpdateAsync(CourseUpdateDto courseUpdateDto)
@@ -96,10 +96,10 @@ namespace FreeCourseServices.Catalog.Services
 
             if (result == null)
             {
-                return Response<NoContent>.Fail("Course not found", (int)ResponseStatusCodes.Created);
+                return Response<NoContent>.Fail("Course not found", ResponseStatusCodes.Created);
             }
 
-            return Response<NoContent>.Success((int)ResponseStatusCodes.NotFound);
+            return Response<NoContent>.Success(ResponseStatusCodes.NotFound);
         }
 
         public async Task<Response<NoContent>> DeleteAsync(string id)
@@ -108,10 +108,10 @@ namespace FreeCourseServices.Catalog.Services
 
             if (result.DeletedCount > 0)
             {
-                return Response<NoContent>.Success((int)ResponseStatusCodes.NotFound);
+                return Response<NoContent>.Success(ResponseStatusCodes.NotFound);
             }
 
-            return Response<NoContent>.Fail("Course not found", (int)ResponseStatusCodes.NotFound);
+            return Response<NoContent>.Fail("Course not found", ResponseStatusCodes.NotFound);
         }
     }
 }

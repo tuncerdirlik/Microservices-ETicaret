@@ -31,12 +31,12 @@ namespace FreeCourseService.PhotoStock.Controllers
                     Url = returnPath
                 };
 
-                return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto, (int)ResponseStatusCodes.Ok));
+                return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto, ResponseStatusCodes.Ok));
 
             }
             else
             {
-                return CreateActionResultInstance(Response<PhotoDto>.Fail("photo is empty", (int)ResponseStatusCodes.BadRequest));
+                return CreateActionResultInstance(Response<PhotoDto>.Fail("photo is empty", ResponseStatusCodes.BadRequest));
             }
         }
 
@@ -46,12 +46,12 @@ namespace FreeCourseService.PhotoStock.Controllers
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", photoUrl);
             if (!System.IO.File.Exists(path))
             {
-                return CreateActionResultInstance(Response<NoContent>.Fail("photo not found", (int)ResponseStatusCodes.NotFound));
+                return CreateActionResultInstance(Response<NoContent>.Fail("photo not found", ResponseStatusCodes.NotFound));
             }
 
             System.IO.File.Delete(path);
 
-            return CreateActionResultInstance(Response<NoContent>.Success((int)ResponseStatusCodes.NoContent));
+            return CreateActionResultInstance(Response<NoContent>.Success(ResponseStatusCodes.NoContent));
         }
     }
 }
