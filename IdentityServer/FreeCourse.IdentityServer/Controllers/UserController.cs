@@ -37,7 +37,7 @@ namespace FreeCourse.IdentityServer.Controllers
             var result = await _userManager.CreateAsync(user, signupDto.Password);
             if (!result.Succeeded)
             {
-                return BadRequest(Response<NoContent>.Fail(result.Errors.Select(k => k.Description).ToList(), (int)ResponseStatusCodes.BadRequest));
+                return BadRequest(Response<NoContent>.Fail(result.Errors.Select(k => k.Description).ToList(), ResponseStatusCodes.BadRequest));
             }
 
             return NoContent();

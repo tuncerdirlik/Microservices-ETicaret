@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FreeCourse.Shared.Enums;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace FreeCourse.Shared.Dtos
@@ -15,42 +16,42 @@ namespace FreeCourse.Shared.Dtos
 
         public List<string> Errors { get; set; }
 
-        public static Response<T> Success(T data, int statusCode)
+        public static Response<T> Success(T data, ResponseStatusCodes statusCode)
         {
             return new Response<T>
             {
                 Data = data,
-                StatusCode = statusCode,
+                StatusCode = (int)statusCode,
                 IsSuccessful = true
             };
         }
 
-        public static Response<T> Success(int statusCode)
+        public static Response<T> Success(ResponseStatusCodes statusCode)
         {
             return new Response<T>
             {
                 Data = default(T),
-                StatusCode = statusCode,
+                StatusCode = (int)statusCode,
                 IsSuccessful = true
             };
         }
 
-        public static Response<T> Fail(List<string> errors, int statusCode)
+        public static Response<T> Fail(List<string> errors, ResponseStatusCodes statusCode)
         {
             return new Response<T>
             {
                 Errors = errors,
-                StatusCode = statusCode,
+                StatusCode = (int)statusCode,
                 IsSuccessful = false
             };
         }
 
-        public static Response<T> Fail(string error, int statusCode)
+        public static Response<T> Fail(string error, ResponseStatusCodes statusCode)
         {
             return new Response<T>
             {
                 Errors = new List<string> { error },
-                StatusCode = statusCode,
+                StatusCode = (int)statusCode,
                 IsSuccessful = false
             };
         }
