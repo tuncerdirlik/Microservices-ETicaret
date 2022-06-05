@@ -22,7 +22,7 @@ namespace FreeCourse.IdentityServer.Services
             if(exitUser == null)
             {
                 var errors = new Dictionary<string, object>();
-                errors.Add("error", new List<string> { "Email/Şifre hatalı" });
+                errors.Add("errors", new List<string> { "Email/Şifre hatalı" });
 
                 context.Result.CustomResponse = errors;
 
@@ -33,7 +33,7 @@ namespace FreeCourse.IdentityServer.Services
             if (!passwordCheck)
             {
                 var errors = new Dictionary<string, object>();
-                errors.Add("error", new List<string> { "Email/Şifre hatalı" });
+                errors.Add("errors", new List<string> { "Email/Şifre hatalı" });
 
                 context.Result.CustomResponse = errors;
 

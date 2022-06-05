@@ -1,0 +1,43 @@
+﻿@model CourseViewModel
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <img src="@Model.StockPictureUrl" class="card-img-top" />
+            <div class="card-body">
+                <h5 class="card-title">
+                    @Model.Name
+                </h5>
+                <p class="card-text">
+                    @Model.Description
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    Fiyat: @Model.Price.ToString() TL
+                </h4>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-primary d-grid" asp-controller="Basket" asp-action="AddBasketItem" asp-route-courseId="@Model.Id">
+                        Sepete Ekle
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-primary d-grid" asp-controller="Auth" asp-action="SignIn">
+                        Sepete eklemek için giriş yap
+                    </a>
+                }
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
