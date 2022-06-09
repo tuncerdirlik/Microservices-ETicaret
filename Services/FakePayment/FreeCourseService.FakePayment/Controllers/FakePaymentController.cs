@@ -1,6 +1,8 @@
 ﻿using FreeCourse.Shared.ControllerBases;
 using FreeCourse.Shared.Dtos;
+using FreeCourse.Shared.Messages;
 using FreeCourseService.FakePayment.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,10 +16,40 @@ namespace FreeCourseService.FakePayment.Controllers
     [ApiController]
     public class FakePaymentController : CustomBaseController
     {
-        [HttpPost]
-        public IActionResult MakePayment(PaymentDto paymentDto)
+        private readonly ISendEndpointProvider _sendEndpointProvider;
+
+        public FakePaymentController(ISendEndpointProvider sendEndpointProvider)
         {
-            return CreateActionResultInstance(Response<NoContent>.Success(FreeCourse.Shared.Enums.ResponseStatusCodes.Ok));
+            _sendEndpointProvider = sendEndpointProvider;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MakePayment(PaymentDto paymentDto)
+        {
+            var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:create-order-service"));
+
+            var createOrderMessageCommand = new CreateOrderMessageCommand();
+            createOrderMessageCommand.BuyerId = paymentDto.Order.BuyerId;
+            createOrderMessageCommand.Province = paymentDto.Order.Address.Province;
+            createOrderMessageCommand.District = paymentDto.Order.Address.District;
+            createOrderMessageCommand.Street = paymentDto.Order.Address.Street;
+            createOrderMessageCommand.Line = paymentDto.Order.Address.Line;
+            createOrderMessageCommand.ZipCode = paymentDto.Order.Address.ZipCode;
+
+            paymentDto.Order.OrderItems.ForEach(k =>
+            {
+                createOrderMessageCommand.OrderItems.Add(new OrderItem
+                {
+                    PictureUrl = k.PictureUrl,
+                    Price = k.Price,
+                    ProductId = k.ProductId,
+                    ProductName = k.ProductName
+                });
+            });
+
+            await sendEndpoint.Send<CreateOrderMessageCommand>(createOrderMessageCommand);
+
+            return CreateActionResultInstance(FreeCourse.Shared.Dtos.Response<NoContent>.Success(FreeCourse.Shared.Enums.ResponseStatusCodes.Ok));
         }
     }
 }
