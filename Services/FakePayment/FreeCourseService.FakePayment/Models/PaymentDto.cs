@@ -12,5 +12,7 @@ namespace FreeCourseService.FakePayment.Models
         public string Expiration { get; set; }
         public string CCV { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public OrderDto Order { get; set; }
     }
 }
